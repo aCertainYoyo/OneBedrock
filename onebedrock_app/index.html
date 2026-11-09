@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OneBedrock — Minecraft Bedrock Client</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-page text-primary select-none antialiased">
+  <div id="app" class="flex flex-col h-screen overflow-hidden">
+    
+    <!-- Top Frosted AppNavbar (PolyGlass) -->
+    <header class="app-navbar flex items-center justify-between px-8 z-50">
+      <!-- Left: Logo & Wordmark -->
+      <div class="flex items-center space-x-3 cursor-pointer select-none" onclick="app.navigate('home')">
+        <div class="logo-badge flex items-center justify-center">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2B4BFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"></polygon>
+            <circle cx="12" cy="12" r="3" fill="#2B4BFF"></circle>
+          </svg>
+        </div>
+        <div class="flex items-baseline space-x-1.5">
+          <span class="font-extrabold text-xl tracking-tight text-white">ONE<span class="text-accent">BEDROCK</span></span>
+          <span class="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-accent/20 text-accent border border-accent/30">Bedrock Edition</span>
+        </div>
+      </div>
+
+      <!-- Center: Navigation Pills -->
+      <nav class="nav-pill-container flex items-center p-1 rounded-full bg-card/70 border border-white/10 backdrop-blur-md shadow-2xl">
+        <button class="nav-tab active" data-view="home" onclick="app.navigate('home')">
+          <i data-lucide="home" class="w-4 h-4 mr-2"></i>Home
+        </button>
+        <button class="nav-tab" data-view="instances" onclick="app.navigate('instances')">
+          <i data-lucide="layers" class="w-4 h-4 mr-2"></i>Instances
+        </button>
+        <button class="nav-tab" data-view="browse" onclick="app.navigate('browse')">
+          <i data-lucide="compass" class="w-4 h-4 mr-2"></i>Browse
+        </button>
+        <button class="nav-tab" data-view="wardrobe" onclick="app.navigate('wardrobe')">
+          <i data-lucide="shirt" class="w-4 h-4 mr-2"></i>Wardrobe
+        </button>
+        <button class="nav-tab" data-view="stats" onclick="app.navigate('stats')">
+          <i data-lucide="bar-chart-2" class="w-4 h-4 mr-2"></i>Stats
+        </button>
+      </nav>
+
+      <!-- Right: Actions & Xbox Profile Pill -->
+      <div class="flex items-center space-x-3">
+        <!-- Bedrock Status Pill -->
+        <div class="hidden md:flex items-center space-x-2 px-3 py-1.5 rounded-full bg-card/50 border border-white/5 text-xs text-secondary">
+          <span class="w-2 h-2 rounded-full bg-success animate-pulse"></span>
+          <span id="bedrock-status-label">Bedrock Ready</span>
+        </div>
+
+        <!-- Launch Console Button -->
+        <button class="icon-button" title="Live Launch Console" onclick="app.openConsoleModal()">
+          <i data-lucide="terminal" class="w-4 h-4"></i>
+        </button>
+
+        <!-- Settings Button -->
+        <button class="icon-button" title="Settings & Optimizer" onclick="app.openSettingsModal()">
+          <i data-lucide="settings" class="w-4 h-4"></i>
+        </button>
+
+        <!-- Xbox Profile Pill -->
+        <div class="profile-pill flex items-center space-x-2 pl-2 pr-3 py-1 rounded-full bg-card border border-white/10 hover:border-accent/50 cursor-pointer transition-all" onclick="app.openAccountModal()">
+          <img id="navbar-gamerpic" src="https://api.dicebear.com/7.x/bottts/svg?seed=BedrockCrafter&backgroundColor=1a2229" alt="Xbox Avatar" class="w-7 h-7 rounded-full bg-component">
+          <div class="flex flex-col text-left">
+            <span id="navbar-gamertag" class="text-xs font-semibold text-white leading-none">BedrockCrafter</span>
+            <span class="text-[9px] text-accent font-medium leading-none mt-0.5">Xbox Live</span>
+          </div>
+          <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-secondary"></i>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 overflow-y-auto relative z-10 custom-scroll">
+      
+      <!-- ================= VIEW: HOME ================= -->
+      <section id="view-home" class="view-panel active p-8 pt-4 max-w-7xl mx-auto space-y-8">
+        
+        <!-- Hero Banner with Bedrock Key Art -->
+        <div class="hero-banner relative rounded-3xl overflow-hidden border border-white/10 p-10 flex flex-col justify-end min-h-[380px] shadow-2xl">
+          <div class="hero-overlay absolute inset-0 bg-gradient-to-t from-page via-page/60 to-transparent z-10"></div>
+          <div class="hero-bg absolute inset-0 bg-cover bg-center transition-transform duration-700 hover:scale-105"></div>
+          
+          <div class="relative z-20 space-y-4 max-w-2xl">
+            <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-accent/20 border border-accent/40 text-accent text-xs font-semibold backdrop-blur-md">
+              <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+              <span>OneBedrock Client v1.0.0</span>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight">
+              The Next-Gen Launcher for <span class="text-transparent bg-clip-text bg-gradient-to-r from-accent to-blue-400">Minecraft Bedrock</span>
+            </h1>
+            <p class="text-secondary text-sm md:text-base leading-relaxed">
+              Experience uncapped FPS, instant VSync control, integrated add-on management, and seamless Xbox Live authentication. Built exclusively for Bedrock Edition.
+            </p>
+          </div>
+
+          <!-- Floating Launch Dock inside Hero -->
+          <div class="relative z-20 mt-8 pt-6 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
+            
+            <!-- Left: Active Instance Capsule -->
+            <div class="flex items-center space-x-3 bg-card/80 border border-white/10 backdrop-blur-md px-4 py-2.5 rounded-2xl cursor-pointer hover:border-accent/40 transition-all" onclick="app.navigate('instances')">
+              <div class="w-10 h-10 rounded-xl bg-accent/20 flex items-center justify-center text-accent">
+                <i data-lucide="swords" class="w-5 h-5" id="hero-instance-icon"></i>
+              </div>
+              <div class="flex flex-col">
+                <span class="text-xs text-secondary uppercase font-semibold tracking-wider">Active Profile</span>
+                <span id="hero-instance-name" class="text-sm font-bold text-white">PvP Competitive</span>
+                <span id="hero-instance-tag" class="text-[10px] text-accent font-medium">Bedrock 1.21.60 • Max FPS</span>
+              </div>
+              <i data-lucide="chevron-right" class="w-4 h-4 text-secondary ml-2"></i>
+            </div>
+
+            <!-- Center: Giant Play Button -->
+            <div class="flex-1 flex justify-center max-w-xs">
+              <button id="btn-main-launch" class="btn-launch-glow w-full flex items-center justify-center space-x-3 py-4 px-8 rounded-2xl bg-accent hover:bg-accent-hover text-white font-extrabold text-lg tracking-wide shadow-2xl transition-all active:scale-95" onclick="app.launchBedrock()">
+                <i data-lucide="play" class="w-6 h-6 fill-white"></i>
+                <span id="btn-launch-text">LAUNCH BEDROCK</span>
+              </button>
+            </div>
+
+            <!-- Right: Quick Server Connect -->
+            <div class="flex items-center space-x-3 bg-card/80 border border-white/10 backdrop-blur-md px-4 py-2.5 rounded-2xl">
+              <div class="flex flex-col">
+                <span class="text-xs text-secondary uppercase font-semibold tracking-wider">Quick Server</span>
+                <select id="quick-server-select" class="bg-transparent text-sm font-bold text-white outline-none cursor-pointer">
+                  <option value="" class="bg-card">Singleplayer / Realms</option>
+                  <option value="geo.hivebedrock.network" class="bg-card">The Hive (Featured)</option>
+                  <option value="play.nethergames.org" class="bg-card">NetherGames Network</option>
+                  <option value="play.cubecraft.net" class="bg-card">CubeCraft Games</option>
+                  <option value="play.galaxite.net" class="bg-card">Galaxite</option>
+                </select>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Quick Stats & Optimization Row -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="card p-6 flex items-center space-x-4">
+            <div class="w-12 h-12 rounded-2xl bg-blue-500/10 flex items-center justify-center text-accent">
+              <i data-lucide="zap" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <span class="text-xs text-secondary font-medium">Framerate Optimization</span>
+              <div class="text-lg font-bold text-white flex items-center space-x-2">
+                <span id="metric-fps-badge">Uncapped (VSync OFF)</span>
+              </div>
+              <span class="text-xs text-success">Optimized for low latency</span>
+            </div>
+          </div>
+
+          <div class="card p-6 flex items-center space-x-4">
+            <div class="w-12 h-12 rounded-2xl bg-purple-500/10 flex items-center justify-center text-purple-400">
+              <i data-lucide="box" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <span class="text-xs text-secondary font-medium">Add-ons & Shaders</span>
+              <div class="text-lg font-bold text-white" id="metric-packs-badge">PolyGlass UI Active</div>
+              <span class="text-xs text-secondary">2 Packs in com.mojang</span>
+            </div>
+          </div>
+
+          <div class="card p-6 flex items-center space-x-4">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center text-success">
+              <i data-lucide="shield-check" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <span class="text-xs text-secondary font-medium">Authentication</span>
+              <div class="text-lg font-bold text-white">Bedrock Account Only</div>
+              <span class="text-xs text-secondary">Zero Java requirement</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bedrock News & Patch Notes Section -->
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <h2 class="text-xl font-bold text-white flex items-center space-x-2">
+              <i data-lucide="newspaper" class="w-5 h-5 text-accent"></i>
+              <span>Bedrock News & Patch Notes</span>
+            </h2>
+            <span class="text-xs text-secondary cursor-pointer hover:text-white" onclick="app.navigate('browse')">View All in Discover →</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="home-news-grid">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ================= VIEW: INSTANCES (CLUSTERS) ================= -->
+      <section id="view-instances" class="view-panel p-8 pt-4 max-w-7xl mx-auto space-y-8">
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="text-3xl font-extrabold text-white tracking-tight">Bedrock Instances</h1>
+            <p class="text-secondary text-sm mt-1">Manage isolated performance profiles, resource packs, and Bedrock settings.</p>
+          </div>
+          <button class="btn-primary flex items-center space-x-2 px-4 py-2.5 rounded-xl font-semibold text-sm" onclick="app.openNewInstanceModal()">
+            <i data-lucide="plus" class="w-4 h-4"></i>
+            <span>Create Profile</span>
+          </button>
+        </div>
+
+        <!-- Instance Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="instances-grid">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <!-- Active Instance Detailed Inspector -->
+        <div class="card p-8 space-y-6">
+          <div class="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-6">
+            <div class="flex items-center space-x-4">
+              <div class="w-14 h-14 rounded-2xl bg-accent/20 flex items-center justify-center text-accent">
+                <i data-lucide="settings-2" class="w-7 h-7"></i>
+              </div>
+              <div>
+                <span class="text-xs font-bold text-accent uppercase tracking-wider">Profile Inspector</span>
+                <h3 class="text-2xl font-bold text-white" id="inspect-name">PvP Competitive</h3>
+                <p class="text-secondary text-xs" id="inspect-desc">Custom settings for competitive Bedrock gameplay.</p>
+              </div>
+            </div>
+
+            <div class="flex items-center space-x-3">
+              <button class="btn-secondary px-4 py-2 rounded-xl text-xs font-semibold" onclick="app.applyPreset('pvp_fps')">Apply PvP FPS</button>
+              <button class="btn-secondary px-4 py-2 rounded-xl text-xs font-semibold" onclick="app.applyPreset('balanced')">Apply Balanced</button>
+              <button class="btn-secondary px-4 py-2 rounded-xl text-xs font-semibold" onclick="app.applyPreset('ultra_rtx')">Apply RTX Shaders</button>
+            </div>
+          </div>
+
+          <!-- Options Grid -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="inspect-options-grid">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= VIEW: BROWSE (DISCOVER) ================= -->
+      <section id="view-browse" class="view-panel p-8 pt-4 max-w-7xl mx-auto space-y-8">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h1 class="text-3xl font-extrabold text-white tracking-tight">Discover Bedrock Content</h1>
+            <p class="text-secondary text-sm mt-1">Curated Bedrock servers, shaders, performance add-ons, and UI packs.</p>
+          </div>
+          
+          <div class="flex items-center space-x-2 bg-card border border-white/10 rounded-xl px-3 py-2 w-full md:w-72">
+            <i data-lucide="search" class="w-4 h-4 text-secondary"></i>
+            <input type="text" id="browse-search" placeholder="Search servers, packs..." class="bg-transparent text-sm text-white placeholder-secondary outline-none w-full">
+          </div>
+        </div>
+
+        <!-- Featured Servers -->
+        <div class="space-y-4">
+          <h2 class="text-xl font-bold text-white flex items-center space-x-2">
+            <i data-lucide="globe" class="w-5 h-5 text-accent"></i>
+            <span>Featured Bedrock Servers</span>
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="browse-servers-grid">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- Featured Add-ons & Packs -->
+        <div class="space-y-4">
+          <h2 class="text-xl font-bold text-white flex items-center space-x-2">
+            <i data-lucide="package" class="w-5 h-5 text-accent"></i>
+            <span>Curated Bedrock Add-ons & Shaders</span>
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="browse-packs-grid">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= VIEW: WARDROBE (3D SKINS) ================= -->
+      <section id="view-wardrobe" class="view-panel p-8 pt-4 max-w-7xl mx-auto space-y-8">
+        <div>
+          <h1 class="text-3xl font-extrabold text-white tracking-tight">Bedrock Wardrobe</h1>
+          <p class="text-secondary text-sm mt-1">Interactive 3D skin customizer, cape changer, and player cosmetics.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+          <!-- Left: 3D Skin Viewer Canvas -->
+          <div class="md:col-span-7 card p-8 flex flex-col items-center justify-center relative overflow-hidden min-h-[480px]">
+            <div class="absolute top-4 left-4 z-10 flex items-center space-x-2">
+              <span class="text-xs font-semibold px-2.5 py-1 rounded-md bg-accent/20 text-accent border border-accent/30">Interactive 3D</span>
+              <span class="text-xs text-secondary">Drag to rotate</span>
+            </div>
+
+            <canvas id="skin-canvas" width="360" height="420" class="cursor-grab active:cursor-grabbing"></canvas>
+
+            <div class="mt-4 flex items-center space-x-4 z-10">
+              <button class="btn-secondary px-3 py-1.5 rounded-lg text-xs" onclick="wardrobe.toggleWalk()">
+                <i data-lucide="play" class="w-3.5 h-3.5 inline mr-1"></i>Toggle Animation
+              </button>
+              <button class="btn-secondary px-3 py-1.5 rounded-lg text-xs" onclick="wardrobe.resetRotation()">
+                <i data-lucide="rotate-ccw" class="w-3.5 h-3.5 inline mr-1"></i>Reset View
+              </button>
+            </div>
+          </div>
+
+          <!-- Right: Presets, Upload & Capes -->
+          <div class="md:col-span-5 space-y-6">
+            <!-- Model Type -->
+            <div class="card p-6 space-y-4">
+              <h3 class="text-base font-bold text-white">Character Model</h3>
+              <div class="grid grid-cols-2 gap-3">
+                <button class="btn-secondary active py-3 rounded-xl text-sm font-semibold flex items-center justify-center space-x-2" id="btn-model-steve" onclick="wardrobe.setModel('steve')">
+                  <i data-lucide="user" class="w-4 h-4"></i>
+                  <span>Steve (Classic)</span>
+                </button>
+                <button class="btn-secondary py-3 rounded-xl text-sm font-semibold flex items-center justify-center space-x-2" id="btn-model-alex" onclick="wardrobe.setModel('alex')">
+                  <i data-lucide="user" class="w-4 h-4"></i>
+                  <span>Alex (Slim)</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Skin Presets -->
+            <div class="card p-6 space-y-4">
+              <h3 class="text-base font-bold text-white">Bedrock Skin Presets</h3>
+              <div class="grid grid-cols-2 gap-3">
+                <button class="btn-secondary py-2.5 rounded-xl text-xs font-medium text-left px-4" onclick="wardrobe.loadSkin('steve')">Classic Steve</button>
+                <button class="btn-secondary py-2.5 rounded-xl text-xs font-medium text-left px-4" onclick="wardrobe.loadSkin('alex')">Classic Alex</button>
+                <button class="btn-secondary py-2.5 rounded-xl text-xs font-medium text-left px-4" onclick="wardrobe.loadSkin('cyber')">Cyber Bedrock</button>
+                <button class="btn-secondary py-2.5 rounded-xl text-xs font-medium text-left px-4" onclick="wardrobe.loadSkin('diamond')">Diamond Knight</button>
+              </div>
+
+              <div class="pt-2 border-t border-white/5">
+                <label class="btn-primary w-full py-2.5 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 cursor-pointer">
+                  <i data-lucide="upload" class="w-4 h-4"></i>
+                  <span>Import Custom Skin (.png)</span>
+                  <input type="file" id="skin-upload-input" accept="image/png" class="hidden" onchange="wardrobe.handleUpload(event)">
+                </label>
+              </div>
+            </div>
+
+            <!-- Capes -->
+            <div class="card p-6 space-y-4">
+              <h3 class="text-base font-bold text-white">Bedrock Capes</h3>
+              <div class="grid grid-cols-3 gap-2">
+                <button class="btn-secondary active p-2 rounded-xl text-[11px] text-center" onclick="wardrobe.setCape('none')">No Cape</button>
+                <button class="btn-secondary p-2 rounded-xl text-[11px] text-center" onclick="wardrobe.setCape('onebedrock')">OneBedrock</button>
+                <button class="btn-secondary p-2 rounded-xl text-[11px] text-center" onclick="wardrobe.setCape('founders')">Founder's</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= VIEW: STATS ================= -->
+      <section id="view-stats" class="view-panel p-8 pt-4 max-w-7xl mx-auto space-y-8">
+        <div>
+          <h1 class="text-3xl font-extrabold text-white tracking-tight">Gameplay Stats & Telemetry</h1>
+          <p class="text-secondary text-sm mt-1">Track your Bedrock play sessions, favorite servers, and performance benchmarks.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div class="card p-6 space-y-2">
+            <span class="text-xs text-secondary uppercase font-semibold">Total Playtime</span>
+            <div class="text-3xl font-extrabold text-white">8.9 hrs</div>
+            <span class="text-xs text-accent">3 instances played</span>
+          </div>
+
+          <div class="card p-6 space-y-2">
+            <span class="text-xs text-secondary uppercase font-semibold">Avg Bedrock FPS</span>
+            <div class="text-3xl font-extrabold text-success">184 FPS</div>
+            <span class="text-xs text-secondary">VSync Uncapped</span>
+          </div>
+
+          <div class="card p-6 space-y-2">
+            <span class="text-xs text-secondary uppercase font-semibold">Top Server</span>
+            <div class="text-3xl font-extrabold text-white">The Hive</div>
+            <span class="text-xs text-secondary">24 matches logged</span>
+          </div>
+
+          <div class="card p-6 space-y-2">
+            <span class="text-xs text-secondary uppercase font-semibold">Active Account</span>
+            <div class="text-xl font-bold text-white truncate" id="stats-gamertag">BedrockCrafter</div>
+            <span class="text-xs text-accent">Xbox Live / Local</span>
+          </div>
+        </div>
+
+        <!-- Recent Sessions Table -->
+        <div class="card p-8 space-y-4">
+          <h3 class="text-lg font-bold text-white">Recent Bedrock Sessions</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm">
+              <thead class="text-xs text-secondary uppercase border-b border-white/10">
+                <tr>
+                  <th class="pb-3">Instance</th>
+                  <th class="pb-3">Server / Mode</th>
+                  <th class="pb-3">Duration</th>
+                  <th class="pb-3">Status</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-white/5 text-secondary" id="stats-sessions-body">
+                <tr>
+                  <td class="py-3 font-semibold text-white">PvP Competitive</td>
+                  <td class="py-3">The Hive (geo.hivebedrock.network)</td>
+                  <td class="py-3">48 mins</td>
+                  <td class="py-3"><span class="px-2 py-0.5 rounded text-[10px] bg-success/20 text-success">Finished</span></td>
+                </tr>
+                <tr>
+                  <td class="py-3 font-semibold text-white">RTX Shaders & Graphics</td>
+                  <td class="py-3">Singleplayer World (Survival)</td>
+                  <td class="py-3">1 hr 12 mins</td>
+                  <td class="py-3"><span class="px-2 py-0.5 rounded text-[10px] bg-success/20 text-success">Finished</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Modal: Account Manager (Bedrock / Xbox Live Only) -->
+    <div id="modal-account" class="modal-overlay hidden">
+      <div class="modal-card max-w-md w-full p-6 space-y-6">
+        <div class="flex items-center justify-between border-b border-white/10 pb-4">
+          <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-success flex items-center justify-center">
+              <i data-lucide="shield" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-white">Bedrock Accounts</h3>
+              <p class="text-secondary text-xs">No Java Edition Account Required</p>
+            </div>
+          </div>
+          <button class="text-secondary hover:text-white" onclick="app.closeModals()">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <!-- Account List -->
+        <div class="space-y-3" id="modal-accounts-list">
+          <!-- Rendered dynamically -->
+        </div>
+
+        <!-- Add Bedrock Account Section -->
+        <div class="pt-4 border-t border-white/10 space-y-4">
+          <h4 class="text-xs uppercase font-bold text-secondary tracking-wider">Add Bedrock Player</h4>
+          <div class="flex items-center space-x-2">
+            <input type="text" id="input-new-gamertag" placeholder="Enter Bedrock GamerTag..." class="input-primary flex-1 py-2 px-3 text-sm">
+            <button class="btn-primary px-4 py-2 rounded-xl text-xs font-semibold" onclick="app.addLocalAccount()">Add</button>
+          </div>
+
+          <div class="pt-2">
+            <button class="btn-secondary w-full py-2.5 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2" onclick="app.startDeviceFlow()">
+              <i data-lucide="microsoft" class="w-4 h-4 text-accent"></i>
+              <span>Sign In with Microsoft / Xbox Live</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Live Launch Console -->
+    <div id="modal-console" class="modal-overlay hidden">
+      <div class="modal-card max-w-2xl w-full p-6 space-y-4">
+        <div class="flex items-center justify-between border-b border-white/10 pb-4">
+          <div class="flex items-center space-x-3">
+            <i data-lucide="terminal" class="w-5 h-5 text-accent"></i>
+            <h3 class="text-lg font-bold text-white">OneBedrock Engine Console</h3>
+          </div>
+          <button class="text-secondary hover:text-white" onclick="app.closeModals()">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <div id="console-output" class="bg-black/60 border border-white/10 rounded-xl p-4 font-mono text-xs text-secondary h-72 overflow-y-auto space-y-1">
+          <!-- Live logs rendered here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Settings & Optimizer -->
+    <div id="modal-settings" class="modal-overlay hidden">
+      <div class="modal-card max-w-lg w-full p-6 space-y-6">
+        <div class="flex items-center justify-between border-b border-white/10 pb-4">
+          <div class="flex items-center space-x-3">
+            <i data-lucide="sliders" class="w-5 h-5 text-accent"></i>
+            <h3 class="text-lg font-bold text-white">OneBedrock Settings</h3>
+          </div>
+          <button class="text-secondary hover:text-white" onclick="app.closeModals()">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <div class="space-y-4 text-sm">
+          <div class="space-y-1">
+            <span class="text-xs text-secondary font-semibold">Bedrock com.mojang Directory</span>
+            <input type="text" id="settings-mojang-path" readonly class="input-primary w-full py-2 px-3 text-xs text-secondary cursor-not-allowed">
+          </div>
+
+          <div class="flex items-center justify-between py-2 border-t border-white/5">
+            <div>
+              <div class="font-semibold text-white">Uncapped FPS (Disable VSync)</div>
+              <div class="text-xs text-secondary">Allows Bedrock to run at max refresh rate</div>
+            </div>
+            <input type="checkbox" id="setting-toggle-vsync" class="toggle-checkbox" onchange="app.toggleVSync(this.checked)">
+          </div>
+
+          <div class="flex items-center justify-between py-2 border-t border-white/5">
+            <div>
+              <div class="font-semibold text-white">Hardware Ray Tracing</div>
+              <div class="text-xs text-secondary">Enables Bedrock RTX pipeline & PBR</div>
+            </div>
+            <input type="checkbox" id="setting-toggle-rtx" class="toggle-checkbox" onchange="app.toggleRTX(this.checked)">
+          </div>
+        </div>
+
+        <div class="pt-4 border-t border-white/10 flex justify-end">
+          <button class="btn-primary px-5 py-2 rounded-xl text-xs font-semibold" onclick="app.closeModals()">Done</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="js/wardrobe.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
